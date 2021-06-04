@@ -1,9 +1,9 @@
 package com.jwt.service;
 
-import com.jwt.dto.UserDto;
+import com.jwt.dto.MemberDto;
 import com.jwt.entity.Authority;
-import com.jwt.entity.User;
-import com.jwt.repository.UserRepository;
+import com.jwt.entity.Member;
+import com.jwt.repository.MemberRepository;
 import com.jwt.util.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -17,12 +17,12 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class UserService {
 
-    private final UserRepository userRepository;
+    private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
 
     @Transactional
-    public User signUp(UserDto userDto) {
-        if (userRepository.findOneWithAuthoritiesByUsername(userDto.getUsername()).isPresent()) {
+    public Member signUp(MemberDto memberDto) {
+        if (memberRepository.findOneWithAuthoritiesByName(memberDto.getName()).isPresent()) {
             throw new RuntimeException("이미 가입되어 있는 유저입니다.");
         }
 
@@ -30,24 +30,24 @@ public class UserService {
                 .authorityName("ROLE_USER")
                 .build();
 
-        User user = User.builder()
-                .username(userDto.getUsername())
-                .password(passwordEncoder.encode(userDto.getPassword()))
-                .nickname(userDto.getNickname())
+        Member member = Member.builder()
+                .name(memberDto.getName())
+                .password(passwordEncoder.encode(memberDto.getPassword()))
+                .nickname(memberDto.getNickname())
                 .authorities(Collections.singleton(authority))
                 .activated(true)
                 .build();
 
-        return userRepository.save(user);
+        return memberRepository.save(member);
     }
 
     @Transactional(readOnly = true)
-    public Optional<User> getUserWithAuthorities(String username) {
-        return userRepository.findOneWithAuthoritiesByUsername(username);
+    public Optional<Member> getUserWithAuthorities(String username) {
+        return memberRepository.findOneWithAuthoritiesByName(username);
     }
 
     @Transactional(readOnly = true)
-    public Optional<User> getMyUserWithAuthorities() {
-        return SecurityUtil.getCurrentUsername().flatMap(userRepository::findOneWithAuthoritiesByUsername);
+    public Optional<Member> getMyUserWithAuthorities() {
+        return SecurityUtil.getCurrentUsername().flatMap(memberRepository::findOneWithAuthoritiesByName);
     }
 }

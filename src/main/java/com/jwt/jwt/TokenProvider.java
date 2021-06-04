@@ -1,8 +1,11 @@
 package com.jwt.jwt;
 
+import com.jwt.entity.UserMember;
+import com.jwt.repository.MemberRepository;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Value;
@@ -23,6 +26,8 @@ import java.util.stream.Collectors;
 @Component
 public class TokenProvider implements InitializingBean {
 
+    private final MemberRepository memberRepository;
+
     private static final String AUTHORITIES_KEY = "auth";
 
     private final String secret;
@@ -32,9 +37,11 @@ public class TokenProvider implements InitializingBean {
 
     public TokenProvider(
             @Value("${jwt.secret}") String secret,
-            @Value("${jwt.token-validity-in-seconds}") long tokenValidityInSeconds) {
+            @Value("${jwt.token-validity-in-seconds}") long tokenValidityInSeconds,
+            MemberRepository memberRepository) {
         this.secret = secret;
         this.tokenValidityInSeconds = tokenValidityInSeconds;
+        this.memberRepository = memberRepository;
     }
 
     @Override
@@ -48,14 +55,14 @@ public class TokenProvider implements InitializingBean {
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.joining(","));
 
-        long now = new Date().getTime();
-        Date validity = new Date(now + this.tokenValidityInSeconds);
+        Date now = new Date();
 
         return Jwts.builder()
                 .setSubject(authentication.getName())
                 .claim(AUTHORITIES_KEY, authorities)
                 .signWith(key, SignatureAlgorithm.HS512)
-                .setExpiration(validity)
+                .setIssuedAt(now)
+                .setExpiration(new Date(now.getTime() + tokenValidityInSeconds))
                 .compact();
     }
 
@@ -72,7 +79,8 @@ public class TokenProvider implements InitializingBean {
                 .collect(Collectors.toSet());
 
 
-        User principal = new User(claims.getSubject(), "", authorities);
+        UserMember principal = new UserMember(memberRepository.findOneWithAuthoritiesByName(claims.getSubject()).get());
+//        User principal = new User(claims.getSubject(), "", authorities);
 
         return new UsernamePasswordAuthenticationToken(principal,  token, authorities);
     }

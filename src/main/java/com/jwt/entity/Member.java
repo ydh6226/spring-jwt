@@ -15,18 +15,18 @@ import java.util.Set;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class User {
+public class Member {
 
     @JsonIgnore
     @Id @GeneratedValue
-    private Long userId;
+    private Long id;
 
-    private String username;
+    private String name;
 
     @JsonIgnore
     private String password;
 
-    private String nickname;;
+    private String nickname;
 
     private boolean activated;
 

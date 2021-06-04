@@ -1,7 +1,7 @@
 package com.jwt.controller;
 
-import com.jwt.dto.UserDto;
-import com.jwt.entity.User;
+import com.jwt.dto.MemberDto;
+import com.jwt.entity.Member;
 import com.jwt.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -12,24 +12,24 @@ import javax.validation.Valid;
 
 @RestController
 @RequiredArgsConstructor
-public class UserController {
+public class MemberController {
 
     private final UserService userService;
 
     @PostMapping("/signup")
-    public ResponseEntity<User> signup(@Valid @RequestBody UserDto userDto) {
-        return ResponseEntity.ok(userService.signUp(userDto));
+    public ResponseEntity<Member> signup(@Valid @RequestBody MemberDto memberDto) {
+        return ResponseEntity.ok(userService.signUp(memberDto));
     }
 
     @GetMapping("/user")
     @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
-    public ResponseEntity<User> getMyUserInfo() {
+    public ResponseEntity<Member> getMyUserInfo() {
         return ResponseEntity.ok(userService.getMyUserWithAuthorities().get());
     }
 
     @GetMapping("/user/{username}")
     @PreAuthorize("hasAnyRole('ADMIN')")
-    public ResponseEntity<User> getUserInfo(@PathVariable String username) {
+    public ResponseEntity<Member> getUserInfo(@PathVariable String username) {
         return ResponseEntity.ok(userService.getUserWithAuthorities(username).get());
     }
 

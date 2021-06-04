@@ -7,11 +7,11 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 @Data
-public class UserDto {
+public class MemberDto {
 
     @NotNull
     @Size(min = 3, max = 50)
-    private String username;
+    private String name;
 
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @NotNull

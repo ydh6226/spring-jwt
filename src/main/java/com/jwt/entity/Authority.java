@@ -9,9 +9,12 @@ import javax.persistence.Id;
 @Getter @Setter
 @Builder
 @NoArgsConstructor
-@AllArgsConstructor
 public class Authority {
 
     @Id
     private String authorityName;
+
+    public Authority(String authorityName) {
+        this.authorityName = authorityName;
+    }
 }
