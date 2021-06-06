@@ -1,4 +1,11 @@
 spring:
+  profiles:
+    include:
+      - credentials
+  servlet:
+    multipart:
+      max-file-size: 5MB
+
   datasource:
     url: jdbc:h2:tcp://localhost/~/jwt
     username: sa
@@ -18,3 +25,14 @@ jwt:
   header: Authorization
   secret: c2lsdmVybmluZS10ZWNoLXNwcmluZy1ib290LWp3dC10dXRvcmlhbC1zZWNyZXQtc2lsdmVybmluZS10ZWNoLXNwcmluZy1ib290LWp3dC10dXRvcmlhbC1zZWNyZXQK
   token-validity-in-seconds: 86400
+
+cloud:
+  aws:
+    s3:
+      bucket: jeju-bucket
+    region:
+      static: ap-northeast-2
+    stack:
+      auto: false
+    credentials:
+      instance-profile: true
