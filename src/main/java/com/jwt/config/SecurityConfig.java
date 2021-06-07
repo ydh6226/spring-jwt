@@ -18,7 +18,7 @@ import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 @EnableWebSecurity
-@EnableGlobalMethodSecurity(prePostEnabled = true)
+//@EnableGlobalMethodSecurity(prePostEnabled = true)
 @RequiredArgsConstructor
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
@@ -42,6 +42,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http
             .authorizeRequests()
                 .mvcMatchers("/hello", "/authenticate", "/signup", "/upload").permitAll()
+                .mvcMatchers("/user").authenticated()
+                .mvcMatchers("/user/{username}").hasRole("ADMIN")
                 .anyRequest().authenticated()
                 .and()
             .csrf()

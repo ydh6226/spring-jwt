@@ -22,6 +22,9 @@ import java.util.Date;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+/**
+ * 토큰 생성, 유휴성 검증
+ */
 @Slf4j
 @Component
 public class TokenProvider implements InitializingBean {
@@ -50,6 +53,9 @@ public class TokenProvider implements InitializingBean {
         key = Keys.hmacShaKeyFor(keyBytes);
     }
 
+    /**
+     * 토근 생성
+     */
     public String createToken(Authentication authentication) {
         String authorities = authentication.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
@@ -66,6 +72,9 @@ public class TokenProvider implements InitializingBean {
                 .compact();
     }
 
+    /**
+     * 토근 파싱 후 Authentication 반환
+     */
     public Authentication getAuthentication(String token) {
         Claims claims = Jwts
                 .parserBuilder()
@@ -85,6 +94,9 @@ public class TokenProvider implements InitializingBean {
         return new UsernamePasswordAuthenticationToken(principal,  token, authorities);
     }
 
+    /**
+     * 유효성 검증
+     */
     public boolean validateToken(String token) {
 
         log.info(token);
