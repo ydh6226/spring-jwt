@@ -3,6 +3,9 @@ package com.jwt.controller;
 import com.jwt.aws.S3Uploader;
 import com.jwt.entity.Member;
 import com.jwt.entity.UserMember;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +18,7 @@ import java.io.IOException;
 
 @CrossOrigin(origins = "*")
 @RestController
+@RequestMapping("/api")
 @RequiredArgsConstructor
 public class HelloController {
 
@@ -26,6 +30,7 @@ public class HelloController {
         return ResponseEntity.ok("hello");
     }
 
+    @ApiResponses(value = @ApiResponse(code = 400, message = "파일이 없거나 이미지 파일이 아닌 경우"))
     @PostMapping("/upload")
     public ResponseEntity<String> upload(MultipartFile file) throws IOException {
         String contentType = file.getContentType();

@@ -36,3 +36,10 @@ cloud:
       auto: false
     credentials:
       instance-profile: true
+
+logging:
+  level:
+    com:
+      amazonaws:
+        util:
+          EC2MetadataUtils: error
