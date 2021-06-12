@@ -32,10 +32,12 @@ dependencies {
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.security:spring-security-test'
 
-
     //swagger
     implementation 'io.springfox:springfox-swagger2:2.9.2'
     implementation 'io.springfox:springfox-swagger-ui:2.9.2'
+
+    //MariaDB
+    implementation 'org.mariadb.jdbc:mariadb-java-client'
 
     //jwt
     implementation group: 'io.jsonwebtoken', name: 'jjwt-api', version: '0.11.2'

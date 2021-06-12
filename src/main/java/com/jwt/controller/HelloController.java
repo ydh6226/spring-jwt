@@ -2,8 +2,6 @@ package com.jwt.controller;
 
 import com.jwt.aws.S3Uploader;
 import com.jwt.entity.Member;
-import com.jwt.entity.UserMember;
-import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import lombok.RequiredArgsConstructor;
@@ -13,7 +11,6 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.validation.constraints.NotNull;
 import java.io.IOException;
 
 @CrossOrigin(origins = "*")
@@ -38,5 +35,10 @@ public class HelloController {
             return new ResponseEntity<>("이미지 파일을 선택하세요", HttpStatus.BAD_REQUEST);
         }
         return ResponseEntity.ok(s3Uploader.upload(file));
+    }
+
+    @GetMapping("/say-hello")
+    public ResponseEntity<String> sayHello() {
+        return ResponseEntity.ok("hello");
     }
 }
